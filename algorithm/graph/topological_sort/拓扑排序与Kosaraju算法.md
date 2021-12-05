@@ -32,7 +32,7 @@ image
 
 image
 
-![img](https:////upload-images.jianshu.io/upload_images/22556481-b5eb61efc1116cbd?imageMogr2/auto-orient/strip|imageView2/2/w/537/format/webp)
+![img](https://i.bmp.ovh/imgs/2021/12/844bff9f1d77e73f.png)
 
 image
 
@@ -54,31 +54,31 @@ image
 
 我们还是以一个具体的过程为例讲解
 
-![img](https:////upload-images.jianshu.io/upload_images/22556481-98ab06e57fec0435?imageMogr2/auto-orient/strip|imageView2/2/w/900/format/webp)
+![img](https://i.bmp.ovh/imgs/2021/12/5a1a4ca54d5a5692.png)
 
 image
 
-![img](https:////upload-images.jianshu.io/upload_images/22556481-6d487521ae1df963?imageMogr2/auto-orient/strip|imageView2/2/w/1061/format/webp)
+![img](https://i.bmp.ovh/imgs/2021/12/f221f87455013a6b.png)
 
 image
 
-![img](https:////upload-images.jianshu.io/upload_images/22556481-2593aaf9532b94ef?imageMogr2/auto-orient/strip|imageView2/2/w/1099/format/webp)
+![img](https://i.bmp.ovh/imgs/2021/12/a8715f96b6963325.png)
 
 image
 
-![img](https:////upload-images.jianshu.io/upload_images/22556481-1b94748fd9d9a64d?imageMogr2/auto-orient/strip|imageView2/2/w/1093/format/webp)
+![img](https://i.bmp.ovh/imgs/2021/12/9a0eac8aef30b513.png)
 
 image
 
-![img](https:////upload-images.jianshu.io/upload_images/22556481-79beba467a48229f?imageMogr2/auto-orient/strip|imageView2/2/w/1067/format/webp)
+![img](https://i.bmp.ovh/imgs/2021/12/0fffd7c2c47fbe75.png)
 
 image
 
-![img](https:////upload-images.jianshu.io/upload_images/22556481-35ceead149dd91c9?imageMogr2/auto-orient/strip|imageView2/2/w/1105/format/webp)
+![img](https://i.bmp.ovh/imgs/2021/12/01f8b1fd5ddf2c70.png)
 
 image
 
-![img](https:////upload-images.jianshu.io/upload_images/22556481-ee1f12f53c25fc09?imageMogr2/auto-orient/strip|imageView2/2/w/1094/format/webp)
+![img](https://i.bmp.ovh/imgs/2021/12/c78e4461fa0db36c.png)
 
 
 
@@ -380,7 +380,7 @@ status TopSort(pALGraph G,pQueue queue){
 
 回想一下我们在无向图的时候，当时我们就利用深度优先搜索解决了一幅无向图的连通问题。根据深搜能够到达所有连通的顶点，我们很容易解决这个问题。但是，问题变成有向图，就没有那么简单了！下面分别是无向图和有向图的两个例子：
 
-![img](https:////upload-images.jianshu.io/upload_images/22556481-b70f25b4077e5ac8?imageMogr2/auto-orient/strip|imageView2/2/w/717/format/webp)
+![img](https://i.bmp.ovh/imgs/2021/12/b118e16f3978f3f5.png)
 
 无向图的各连通分量
 
@@ -424,7 +424,7 @@ Kosaraju算法就是一种经典的解决强连通性问题的算法，它实现
 
 回忆一下我们之前在无向图的部分如何解决连通性问题的，**一次dfs能够恰好遍历一个连通分量**，所以我们可以通过`dfs`来计数，获取每个顶点的`id[]`;所以，我们在解决有向图的强连通性问题时，也希望能够利用**一次dfs能够恰好遍历一个连通分量**的性质；不过，在有向图中，它失效了，来看一下图一：
 
-![img](https:////upload-images.jianshu.io/upload_images/22556481-f640c20e3777822c?imageMogr2/auto-orient/strip|imageView2/2/w/810/format/webp)
+![img](https://s3.bmp.ovh/imgs/2021/12/05aa5919eab233e4.png)
 
 图一
 
