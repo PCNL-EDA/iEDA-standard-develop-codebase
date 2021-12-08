@@ -1,0 +1,1079 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The page collects the standard base code for develop use.">
+      
+      
+        <meta name="author" content="PCNL-iEDA">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.0.5">
+    
+    
+      
+        <title>堆 - iEDA Standard Develop Codebase</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.a617204b.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.9204c3b2.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="iEDA Standard Develop Codebase" class="md-header__button md-logo" aria-label="iEDA Standard Develop Codebase" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            iEDA Standard Develop Codebase
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              堆
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PCNL-EDA/iEDA-standard-develop-codebase" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PCNL-EDA/iEDA-standard-develop-codebase
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      主页
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../algorithm/dynamic_programing/%E8%83%8C%E5%8C%85DP/" class="md-tabs__link">
+        算法
+      </a>
+    </li>
+  
+
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../cmake/cmake/" class="md-tabs__link">
+        CMake
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../geometry/%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%9F%BA%E7%A1%80/" class="md-tabs__link md-tabs__link--active">
+        数据结构
+      </a>
+    </li>
+  
+
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="iEDA Standard Develop Codebase" class="md-nav__button md-logo" aria-label="iEDA Standard Develop Codebase" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    iEDA Standard Develop Codebase
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PCNL-EDA/iEDA-standard-develop-codebase" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PCNL-EDA/iEDA-standard-develop-codebase
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        主页
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          算法
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="算法" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          算法
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_1" type="checkbox" id="__nav_2_1" >
+      
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_2_1">
+          动态规划
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="动态规划" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          动态规划
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../algorithm/dynamic_programing/%E8%83%8C%E5%8C%85DP/" class="md-nav__link">
+        背包DP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../algorithm/dynamic_programing/%E5%8C%BA%E9%97%B4DP/" class="md-nav__link">
+        区间DP
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_2_2">
+          其他算法
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="其他算法" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          其他算法
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../algorithm/general/%E5%B9%B6%E6%9F%A5%E9%9B%86/" class="md-nav__link">
+        并查集
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          CMake
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="CMake" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          CMake
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../cmake/cmake/" class="md-nav__link">
+        基本语法
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          数据结构
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="数据结构" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          数据结构
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_1" type="checkbox" id="__nav_4_1" checked>
+      
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_4_1">
+          几何
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="几何" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_1">
+          <span class="md-nav__icon md-icon"></span>
+          几何
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../geometry/%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%9F%BA%E7%A1%80/" class="md-nav__link">
+        计算几何基础
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          堆
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        堆
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    堆属性
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    堆和普通树的区别
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    来自数组的树
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    更多数学公式
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    可以用堆做什么？
+  </a>
+  
+    <nav class="md-nav" aria-label="可以用堆做什么？">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    插入
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    删除根节点
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    删除任意节点
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    堆属性
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    堆和普通树的区别
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    来自数组的树
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    更多数学公式
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    可以用堆做什么？
+  </a>
+  
+    <nav class="md-nav" aria-label="可以用堆做什么？">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    插入
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    删除根节点
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    删除任意节点
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+  <h1>堆</h1>
+
+<p>堆就是用数组实现的二叉树，所以它没有使用父指针或者子指针。堆根据“堆属性”来排序，“堆属性”决定了树中节点的位置。</p>
+<p>堆的常用方法：</p>
+<ul>
+<li>构建优先队列</li>
+<li>支持堆排序</li>
+<li>快速找出一个集合中的最小值（或者最大值）</li>
+<li>在朋友面前装逼</li>
+</ul>
+<h2 id="_1">堆属性<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>堆分为两种：<em>最大堆*和*最小堆</em>，两者的差别在于节点的排序方式。</p>
+<p>在最大堆中，父节点的值比每一个子节点的值都要大。在最小堆中，父节点的值比每一个子节点的值都要小。这就是所谓的“堆属性”，并且这个属性对堆中的每一个节点都成立。</p>
+<p>例子：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/4064751-14a6cde25bdff968.png?imageMogr2/auto-orient/strip|imageView2/2/w/190/format/webp" /></p>
+<p>这是一个最大堆，，因为每一个父节点的值都比其子节点要大。<code>10</code> 比 <code>7</code> 和 <code>2</code> 都大。<code>7</code> 比 <code>5</code> 和 <code>1</code>都大。</p>
+<p>根据这一属性，那么最大堆总是将其中的最大值存放在树的根节点。而对于最小堆，根节点中的元素总是树中的最小值。堆属性非常有用，因为堆常常被当做优先队列使用，因为可以快速地访问到“最重要”的元素。</p>
+<blockquote>
+<p>**注意：**堆的根节点中存放的是最大或者最小元素，但是其他节点的排序顺序是未知的。例如，在一个最大堆中，最大的那一个元素总是位于 index 0 的位置，但是最小的元素则未必是最后一个元素。--唯一能够保证的是最小的元素是一个叶节点，但是不确定是哪一个。</p>
+</blockquote>
+<h2 id="_2">堆和普通树的区别<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>堆并不能取代二叉搜索树，它们之间有相似之处也有一些不同。我们来看一下两者的主要差别：</p>
+<p>**节点的顺序。**在二叉搜索树中，左子节点必须比父节点小，右子节点必须必比父节点大。但是在堆中并非如此。在最大堆中两个子节点都必须比父节点小，而在最小堆中，它们都必须比父节点大。</p>
+<p>**内存占用。**普通树占用的内存空间比它们存储的数据要多。你必须为节点对象以及左/右子节点指针分配内存。堆仅仅使用一个数据来存储数组，且不使用指针。</p>
+<p><strong>平衡。**二叉搜索树必须是“平衡”的情况下，其大部分操作的复杂度才能达到**O(log n)</strong>。你可以按任意顺序位置插入/删除数据，或者使用 AVL 树或者红黑树，但是在堆中实际上不需要整棵树都是有序的。我们只需要满足堆属性即可，所以在堆中平衡不是问题。因为堆中数据的组织方式可以保证**O(log n)** 的性能。</p>
+<p>**搜索。**在二叉树中搜索会很快，但是在堆中搜索会很慢。在堆中搜索不是第一优先级，因为使用堆的目的是将最大（或者最小）的节点放在最前面，从而快速的进行相关插入、删除操作。</p>
+<h2 id="_3">来自数组的树<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>用数组来实现树相关的数据结构也许看起来有点古怪，但是它在时间和空间上都是很高效的。</p>
+<p>我们准备将上面例子中的树这样存储：</p>
+<div class="highlight"><pre><span></span><code><span class="p">[</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span> <span class="p">]</span>
+</code></pre></div>
+<p>就这么多！我们除了一个简单的数组以外，不需要任何额外的空间。</p>
+<p>如果我们不允许使用指针，那么我们怎么知道哪一个节点是父节点，哪一个节点是它的子节点呢？问得好！节点在数组中的位置index 和它的父节点以及子节点的索引之间有一个映射关系。</p>
+<p>如果 <code>i</code> 是节点的索引，那么下面的公式就给出了它的父节点和子节点在数组中的位置：</p>
+<div class="highlight"><pre><span></span><code><span class="nx">parent</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="p">=</span> <span class="nx">floor</span><span class="p">((</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="nx">left</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>   <span class="p">=</span> <span class="m">2i</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="nx">right</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>  <span class="p">=</span> <span class="m">2i</span> <span class="o">+</span> <span class="mi">2</span>
+</code></pre></div>
+<p>注意 <code>right(i)</code> 就是简单的 <code>left(i) + 1</code>。左右节点总是处于相邻的位置。</p>
+<p>我们将写公式放到前面的例子中验证一下。</p>
+<table>
+<thead>
+<tr>
+<th>Node</th>
+<th>Array index (<code>i</code>)</th>
+<th>Parent index</th>
+<th>Left child</th>
+<th>Right child</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10</td>
+<td>0</td>
+<td>-1</td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>7</td>
+<td>1</td>
+<td>0</td>
+<td>3</td>
+<td>4</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+<td>0</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr>
+<td>5</td>
+<td>3</td>
+<td>1</td>
+<td>7</td>
+<td>8</td>
+</tr>
+<tr>
+<td>1</td>
+<td>4</td>
+<td>1</td>
+<td>9</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>**注意：**根节点<code>(10)</code>没有父节点，因为 <code>-1</code> 不是一个有效的数组索引。同样，节点 <code>(2)</code>，<code>(5)</code>和<code>(1)</code> 没有子节点，因为这些索引已经超过了数组的大小，所以我们在使用这些索引值的时候需要保证是有效的索引值。</p>
+</blockquote>
+<p>复习一下，在最大堆中，父节点的值总是要大于（或者等于）其子节点的值。这意味下面的公式对数组中任意一个索引 <code>i</code>都成立：</p>
+<div class="highlight"><pre><span></span><code><span class="x">array[parent(i)] &gt;= array[i]</span>
+</code></pre></div>
+<p>可以用上面的例子来验证一下这个堆属性。</p>
+<p>如你所见，这些公式允许我们不使用指针就可以找到任何一个节点的父节点或者子节点。事情比简单的去掉指针要复杂，但这就是交易：我们节约了空间，但是要进行更多计算。幸好这些计算很快并且只需要**O(1)**的时间。</p>
+<p>理解数组索引和节点位置之间的关系非常重要。这里有一个更大的堆，它有15个节点被分成了4层：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/4064751-4b11a151bf6c2148.png?imageMogr2/auto-orient/strip|imageView2/2/w/471/format/webp" /></p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/4064751-7515fe1d9f3104ad.png?imageMogr2/auto-orient/strip|imageView2/2/w/551/format/webp" /></p>
+<p>Array.png</p>
+<p>图片中的数字不是节点的值，而是存储这个节点的数组索引！这里是数组索引和树的层级之间的关系：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/4064751-d6fd28a1ba7dbb1a.png?imageMogr2/auto-orient/strip|imageView2/2/w/551/format/webp" /></p>
+<p>由上图可以看到，数组中父节点总是在子节点的前面。</p>
+<p>注意这个方案与一些限制。你可以在普通二叉树中按照下面的方式组织数据，但是在堆中不可以：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/4064751-26be199ebd40f8bf.png?imageMogr2/auto-orient/strip|imageView2/2/w/320/format/webp" /></p>
+<p>在堆中，在当前层级所有的节点都已经填满之前不允许开是下一层的填充，所以堆总是有这样的形状：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/4064751-9590755bc6109a38.png?imageMogr2/auto-orient/strip|imageView2/2/w/413/format/webp" /></p>
+<blockquote>
+<p>**注意：**你可以使用普通树来模拟堆，但是那对空间是极大的浪费。</p>
+</blockquote>
+<p>小测验，假设我们有这样一个数组：</p>
+<div class="highlight"><pre><span></span><code><span class="p">[</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">99</span> <span class="p">]</span>
+</code></pre></div>
+<p>这是一个有效的堆吗？答案是 yes ！一个从低到高有序排列的数组是以有效的最小堆，我们可以将这个堆画出来：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/4064751-525f0584ffbdbbed.png?imageMogr2/auto-orient/strip|imageView2/2/w/219/format/webp" /></p>
+<p>堆属性适用于每一个节点，因为父节点总是比它的字节点小。（你也可以验证一下：一个从高到低有序排列的数组是一个有效的最大堆）</p>
+<blockquote>
+<p>**注意：**并不是每一个最小堆都是一个有序数组！要将堆转换成有序数组，需要使用堆排序。</p>
+</blockquote>
+<h2 id="_4">更多数学公式<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>如果你好奇，这里有更多的公式描述了堆的一些确定属性。你不需要知道这些，但它们有时会派上用场。 可以直接跳过此部分！</p>
+<p>树的*高度*是指从树的根节点到最低的叶节点所需要的步数，或者更正式的定义：高度是指节点之间的边的最大值。一个高度为 h 的堆有 h+1 层。</p>
+<p>下面这个对的高度是3，所以它有4层：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/4064751-9a3b75e40d3f9f04.png?imageMogr2/auto-orient/strip|imageView2/2/w/471/format/webp" /></p>
+<p>如果一个堆有 n 个节点，那么它的高度是 <em>h = floor(log2(n))</em>。这是因为我们总是要将这一层完全填满以后才会填充新的一层。上面的例子有 15 个节点，所以它的高度是 <code>floor(log2(15)) = floor(3.91) = 3</code>。</p>
+<p>如果最下面的一层已经填满，那么那一层包含 <em>2^h</em> 个节点。树中这一层以上所有的节点数目为 <em>2^h - 1</em>。同样是上面这个例子，最下面的一层有8个节点，实际上就是 <code>2^3 = 8</code>。前面的三层一共包含7的节点，即：<code>2^3 - 1 = 8 - 1 = 7</code>。</p>
+<p>所以整个堆中的节点数目为：* 2^(h+1) - 1*。上面的例子中，<code>2^4 - 1 = 16 - 1 = 15</code></p>
+<p>叶节点总是位于数组的 <em>floor(n/2)</em> 和 <em>n-1</em> 之间。</p>
+<h2 id="_5">可以用堆做什么？<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p>有两个原始操作用于保证插入或删除节点以后堆是一个有效的最大堆或者最小堆：</p>
+<ul>
+<li><code>shiftUp()</code>: 如果一个节点比它的父节点大（最大堆）或者小（最小堆），那么需要将它同父节点交换位置。这样是这个节点在数组的位置上升。</li>
+<li><code>shiftDown()</code>: 如果一个节点比它的子节点小（最大堆）或者大（最小堆），那么需要将它向下移动。这个操作也称作“堆化（heapify）”。</li>
+</ul>
+<p>shiftUp 或者 shiftDown 是一个递归的过程，所以它的时间复杂度是 <strong>O(log n)</strong>。</p>
+<p>基于这两个原始操作还有一些其他的操作：</p>
+<ul>
+<li><code>insert(value)</code>: 在堆的尾部添加一个新的元素，然后使用 <code>shiftUp</code> 来修复对。</li>
+<li><code>remove()</code>: 移除并返回最大值（最大堆）或者最小值（最小堆）。为了将这个节点删除后的空位填补上，需要将最后一个元素移到根节点的位置，然后使用 <code>shiftDown</code> 方法来修复堆。</li>
+<li><code>removeAtIndex(index)</code>: 和 <code>remove()</code> 一样，差别在于可以移除堆中任意节点，而不仅仅是根节点。当它与子节点比较位置不时无序时使用 <code>shiftDown()</code>，如果与父节点比较发现无序则使用 <code>shiftUp()</code>。</li>
+<li><code>replace(index, value)</code>：将一个更小的值（最小堆）或者更大的值（最大堆）赋值给一个节点。由于这个操作破坏了堆属性，所以需要使用 <code>shiftUp()</code> 来修复堆属性。</li>
+</ul>
+<p>上面所有的操作的时间复杂度都是 <strong>O(log n)</strong>，因为 shiftUp 和 shiftDown 都很费时。还有少数一些操作需要更多的时间：</p>
+<ul>
+<li><code>search(value)</code>:堆不是为快速搜索而建立的，但是 <code>replace()</code> 和 <code>removeAtIndex()</code> 操作需要找到节点在数组中的index，所以你需要先找到这个index。时间复杂度：<strong>O(n)</strong>。</li>
+<li><code>buildHeap(array)</code>:通过反复调用 <code>insert()</code> 方法将一个（无序）数组转换成一个堆。如果你足够聪明，你可以在 <strong>O(n)</strong> 时间内完成。</li>
+<li>堆排序：由于堆就是一个数组，我们可以使用它独特的属性将数组从低到高排序。时间复杂度：<strong>O(n lg n)</strong>。</li>
+</ul>
+<p>堆还有一个 <code>peek()</code> 方法，不用删除节点就返回最大值（最大堆）或者最小值（最小堆）。时间复杂度 <strong>O(1)</strong> 。</p>
+<blockquote>
+<p><strong>注意：**到目前为止，堆的常用操作还是使用 <code>insert()</code> 插入一个新的元素，和通过 <code>remove()</code>移除最大或者最小值。两者的时间复杂度都是**O(log n)</strong>。其其他的操作是用于支持更高级的应用，比如说建立一个优先队列。</p>
+</blockquote>
+<h3 id="_6">插入<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<p>我们通过一个插入例子来看看插入操作的细节。我们将数字 <code>16</code> 插入到这个堆中：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/4064751-51fd43a2d2191488.png?imageMogr2/auto-orient/strip|imageView2/2/w/190/format/webp" /></p>
+<p>堆的数组是： <code>[ 10, 7, 2, 5, 1 ]</code>。</p>
+<p>第一股是将新的元素插入到数组的尾部。数组变成：</p>
+<div class="highlight"><pre><span></span><code><span class="p">[</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">16</span> <span class="p">]</span>
+</code></pre></div>
+<p>相应的树变成了：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/4064751-7dd89da71927acb8.png?imageMogr2/auto-orient/strip|imageView2/2/w/190/format/webp" /></p>
+<p><code>16</code> 被添加最后一行的第一个空位。</p>
+<p>不行的是，现在堆属性不满足，因为 <code>2</code> 在 <code>16</code> 的上面，我们需要将大的数字在上面（这是一个最大堆）</p>
+<p>为了恢复堆属性，我们需要交换 <code>16</code> 和 <code>2</code>。</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/4064751-785a7a6cd104f775.png?imageMogr2/auto-orient/strip|imageView2/2/w/204/format/webp" /></p>
+<p>现在还没有完成，因为 <code>10</code> 也比 <code>16</code> 小。我们继续交换我们的插入元素和它的父节点，直到它的父节点比它大或者我们到达树的顶部。这就是所谓的 <strong>shift-up</strong>，每一次插入操作后都需要进行。它将一个太大或者太小的数字“浮起”到树的顶部。</p>
+<p>最后我们得到的堆：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/4064751-d7dae273e1f5a0ba.png?imageMogr2/auto-orient/strip|imageView2/2/w/192/format/webp" /></p>
+<p>现在每一个父节点都比它的子节点大。</p>
+<h3 id="_7">删除根节点<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<p>我们将这个树中的 <code>(10)</code> 删除：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/4064751-7eb32c6486a44f73.png?imageMogr2/auto-orient/strip|imageView2/2/w/190/format/webp" /></p>
+<p>现在顶部有一个空的节点，怎么处理？</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/4064751-71783aa7bd24a51f.png?imageMogr2/auto-orient/strip|imageView2/2/w/190/format/webp" /></p>
+<p>当插入节点的时候，我们将新的值返给数组的尾部。现在我们来做相反的事情：我们取出数组中的最后一个元素，将它放到树的顶部，然后再修复堆属性。</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/4064751-c28b15dc371b8e97.png?imageMogr2/auto-orient/strip|imageView2/2/w/190/format/webp" /></p>
+<p>现在来看怎么 <strong>shift-down</strong> <code>(1)</code>。为了保持最大堆的堆属性，我们需要树的顶部是最大的数据。现在有两个数字可用于交换 <code>7</code> 和 <code>2</code>。我们选择这两者中的较大者称为最大值放在树的顶部，所以交换 <code>7</code> 和 <code>1</code>，现在树变成了：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/4064751-bfc42e89b5411f9b.png?imageMogr2/auto-orient/strip|imageView2/2/w/190/format/webp" /></p>
+<p>继续堆化直到该节点没有任何子节点或者它比两个子节点都要大为止。对于我们的堆，我们只需要再有一次交换就恢复了堆属性：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/4064751-8b04275965f88961.png?imageMogr2/auto-orient/strip|imageView2/2/w/208/format/webp" /></p>
+<h3 id="_8">删除任意节点<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<p>绝大多数时候你需要删除的是堆的根节点，因为这就是堆的设计用途。</p>
+<p>但是，删除任意节点也很有用。这是 <code>remove()</code> 的通用版本，它可能会使用到 <code>shiftDown</code> 和 <code>shiftUp</code>。</p>
+<p>我们还是用前面的例子，删除 <code>(7)</code>:</p>
+<p>[图片上传失败...(image-d46ac4-1534077058042)]</p>
+<p>对应的数组是</p>
+<div class="highlight"><pre><span></span><code><span class="p">[</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span> <span class="p">]</span>
+</code></pre></div>
+<p>你知道，移除一个元素会破坏最大堆或者最小堆属性。我们需要将删除的元素和最后一个元素交换：</p>
+<div class="highlight"><pre><span></span><code><span class="p">[</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span> <span class="p">]</span>
+</code></pre></div>
+<p>最后一个元素就是我们需要返回的元素；然后调用 <code>removeLast()</code> 来将它删除。 <code>(1)</code> 比它的子节点小，所以需要 <code>shiftDown()</code> 来修复。</p>
+<p>然而，shift down 不是我们要处理的唯一情况。也有可能我们需要 shift up。考虑一下从下面的堆中删除 <code>(5)</code> 会发生什么：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/4064751-ef711e0072fc773a.png?imageMogr2/auto-orient/strip|imageView2/2/w/219/format/webp" /></p>
+<p>现在 <code>(5)</code> 和 <code>(8)</code> 交换了。因为 <code>(8)</code> 比它的父节点大，我们需要 <code>shiftUp()</code>。</p>
+
+              
+            </article>
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg>
+            回到页面顶部
+          </a>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="页脚">
+      
+        
+        <a href="../../geometry/%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%9F%BA%E7%A1%80/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 计算几何基础" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              计算几何基础
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021 PCNL 开源芯片院士工作室
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "navigation.tracking"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "search": "../../../assets/javascripts/workers/search.cefbb252.min.js"}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.a5f8ea78.min.js"></script>
+      
+    
+  </body>
+</html>

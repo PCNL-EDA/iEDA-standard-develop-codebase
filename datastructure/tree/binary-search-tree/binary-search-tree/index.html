@@ -1,0 +1,789 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The page collects the standard base code for develop use.">
+      
+      
+        <meta name="author" content="PCNL-iEDA">
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.0.5">
+    
+    
+      
+        <title>Binary search tree - iEDA Standard Develop Codebase</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.a617204b.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.9204c3b2.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../../.." title="iEDA Standard Develop Codebase" class="md-header__button md-logo" aria-label="iEDA Standard Develop Codebase" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            iEDA Standard Develop Codebase
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Binary search tree
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PCNL-EDA/iEDA-standard-develop-codebase" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PCNL-EDA/iEDA-standard-develop-codebase
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../.." class="md-tabs__link">
+      主页
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../algorithm/dynamic_programing/%E8%83%8C%E5%8C%85DP/" class="md-tabs__link">
+        算法
+      </a>
+    </li>
+  
+
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../cmake/cmake/" class="md-tabs__link">
+        CMake
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../geometry/%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%9F%BA%E7%A1%80/" class="md-tabs__link">
+        数据结构
+      </a>
+    </li>
+  
+
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="iEDA Standard Develop Codebase" class="md-nav__button md-logo" aria-label="iEDA Standard Develop Codebase" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    iEDA Standard Develop Codebase
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PCNL-EDA/iEDA-standard-develop-codebase" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PCNL-EDA/iEDA-standard-develop-codebase
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        主页
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          算法
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="算法" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          算法
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_1" type="checkbox" id="__nav_2_1" >
+      
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_2_1">
+          动态规划
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="动态规划" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          动态规划
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../algorithm/dynamic_programing/%E8%83%8C%E5%8C%85DP/" class="md-nav__link">
+        背包DP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../algorithm/dynamic_programing/%E5%8C%BA%E9%97%B4DP/" class="md-nav__link">
+        区间DP
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_2_2">
+          其他算法
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="其他算法" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          其他算法
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../algorithm/general/%E5%B9%B6%E6%9F%A5%E9%9B%86/" class="md-nav__link">
+        并查集
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          CMake
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="CMake" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          CMake
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../cmake/cmake/" class="md-nav__link">
+        基本语法
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          数据结构
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="数据结构" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          数据结构
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_1" type="checkbox" id="__nav_4_1" >
+      
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_4_1">
+          几何
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="几何" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_1">
+          <span class="md-nav__icon md-icon"></span>
+          几何
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../geometry/%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%9F%BA%E7%A1%80/" class="md-nav__link">
+        计算几何基础
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../heap/%E5%A0%86/" class="md-nav__link">
+        堆
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+  <h1>Binary search tree</h1>
+
+<p><strong>一、二叉查找树</strong></p>
+<p>**1、定义：**二叉查找树，也称二叉搜索树，或二叉排序树。其定义也比较简单，要么是一颗空树，要么就是具有如下性质的二叉树。</p>
+<p><strong>2、性质：</strong></p>
+<p>（1） 若任意节点的左子树不空，则左子树上所有结点的值均小于它的根结点的值；</p>
+<p>（2） 若任意节点的右子树不空，则右子树上所有结点的值均大于它的根结点的值；</p>
+<p>（3） 任意节点的左、右子树也分别为二叉查找树；</p>
+<p>（4） 没有键值相等的节点。</p>
+<p>（5） 对二叉查找树进行中序遍历，即可得到有序的数列。</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/10270460-1ead48f034b95aed.png?imageMogr2/auto-orient/strip|imageView2/2/w/983/format/webp" /></p>
+<p>图a</p>
+<p>​    如上图所示，是不同形态的二叉查找树。二叉查找树是对要查找的数据进行生成树，左支的值小于右支的值。在查找的时候也是一样的思路，从根节点开始，比节点大进入右支，比节点小进入左支，直到查找到目标值。  </p>
+<p><strong>3、操作：查询、插入、删除</strong></p>
+<p>**查询：**类似二分查找</p>
+<p>**插入：**二叉查找树的插入算法比较简单：空树，就首先生成根节点；不是空树就按照查找的算法，找到父节点，然后作为叶子节点插入，如果值已经存在就插入失败。</p>
+<p>**删除：**删除操作稍微复杂一点，有如下几种情况：</p>
+<div class="highlight"><pre><span></span><code>（1）如果删除的是叶节点，可以直接删除；
+
+（2）如果被删除的元素有一个子节点，可以将子节点直接移到被删除元素的位置；
+
+（3）如果有两个子节点，这时候就采用中序遍历，找到待删除的节点的后继节点，将其与待删除的节点互换，此时待删除节点的位置已经是叶子节点，可以直接删除
+</code></pre></div>
+<p>如下图：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/10270460-1b7c3483f55819a6?imageMogr2/auto-orient/strip|imageView2/2/w/609/format/webp" /></p>
+<p>图b</p>
+<p>将待删除节点与后继节点互换，变成如下图所示：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/10270460-5f2d4b26ffe6baaa?imageMogr2/auto-orient/strip|imageView2/2/w/609/format/webp" /></p>
+<p>图c</p>
+<p>将待删除元素删除，如下图所示：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/10270460-c09b160ac35bd1cd?imageMogr2/auto-orient/strip|imageView2/2/w/609/format/webp" /></p>
+<p>图d</p>
+<p>【注】 1、二叉查找树还有一个性质，即**对二叉查找树进行中序遍历，即可得到有序的数列。**</p>
+<p>​      2、二叉查找树的查询复杂度，和二分查找一样，插入和查找的时间复杂度均为 O(logn) ，但是在最坏的情况下仍然会有 O(n) 的时间复杂度。原因在于插入和删除元素的时候，树没有保持平衡。</p>
+<p><strong>一、二叉平衡树</strong></p>
+<p>**1、定义：**平衡二叉树，又称为AVL树。平衡二叉树有很多种最著名的是由前苏联数学家Adelse—Velskil和Landis在1962年提出的，称为AVL树。</p>
+<p><strong>2、性质：</strong></p>
+<p>它是一棵空树或且具有以下性质：</p>
+<p>（1）左右子树深度之差的绝对值不超过1;</p>
+<p>（2）左右子树仍然为平衡二叉树。</p>
+<p>平衡因子BF=左子树深度－右子树深度，平衡二叉树每个结点的平衡因子只能是1，0，-1。</p>
+<p>【说明】由于普通的二叉查找树会容易失去”平衡“，极端情况下，二叉查找树会退化成线性的链表，导致插入和查找的复杂度下降到 O(n) ，所以，这也是平衡二叉树设计的初衷。那么平衡二叉树如何保持”平衡“呢？根据定义，有两个重点，一是左右两子树的高度差的绝对值不能超过1，二是左右两子树也是一颗平衡二叉树。</p>
+<p>举例：如下图所示，左图是一棵平衡二叉树，根节点10，左右两子树的高度差是1，而右图，虽然根节点左右两子树高度差是0，但是右子树15的左右子树高度差为2，不符合定义，所以右图不是一棵平衡二叉树。</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/10270460-11a55f30b45d4514.png?imageMogr2/auto-orient/strip|imageView2/2/w/1173/format/webp" /></p>
+<p>图e</p>
+<p>由此可以看出平衡二叉树是一棵高度平衡的二叉查找树。所以，要构建跟维系一棵平衡二叉树就比普通的二叉树要复杂的多。在构建一棵平衡二叉树的过程中，当有新的节点要插入时，检查是否因插入后而破坏了树的平衡，如果是，则需要做旋转去改变树的结构。</p>
+<p><strong>3、预备知识：</strong></p>
+<p><strong>左旋</strong>：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/10270460-3f0bd38ead73f3e7.gif?imageMogr2/auto-orient/strip|imageView2/2/w/329/format/webp" /></p>
+<p><strong>右旋</strong>：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/10270460-bfaefde31e3d3b5a.gif?imageMogr2/auto-orient/strip|imageView2/2/w/301/format/webp" /></p>
+<p>不同于顺时针跟逆时针变换这种方式去记忆，上面两个动态图特别方便记忆跟理解：</p>
+<p>（1）左旋就是将节点的右支往左拉，右子节点变成父节点，并把晋升之后多余的左子节点出让给降级节点的右子节点；</p>
+<p>（2）而右旋就是反过来，将节点的左支往右拉，左子节点变成了父节点，并把晋升之后多余的右子节点出让给降级节点的左子节点。</p>
+<p>（3）即左旋就是往左变换，右旋就是往右变换。不管是左旋还是右旋，旋转的目的都是将节点多的一支出让节点给另一个节点少的一支。</p>
+<p>举个例子，像上图是否平衡二叉树的图里面，左图在没插入前”19“节点前，该树还是平衡二叉树，但是在插入”19“后，导致了”15“的左右子树失去了”平衡“，所以此时可以将”15“节点进行左旋，让”15“自身把节点出让给”17“作为”17“的左树，使得”17“节点左右子树平衡，而”15“节点没有子树，左右也平衡了。如下图：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/10270460-2a02a54d78502506.png?imageMogr2/auto-orient/strip|imageView2/2/w/1141/format/webp" /></p>
+<p>图f</p>
+<p><strong>4、操作：查询、插入、删除</strong></p>
+<p>**查询：**类似二分查找</p>
+<p><strong>插入：**由于在构建平衡二叉树的时候，当有**新节点插入**时，都会判断插入后是否平衡，这说明了插入新节点前，都是平衡的，也即高度差绝对值不会超过1。当新节点插入后，有可能会有导致树不平衡，这时候就需要进行调整，而可能出现的情况就有4种，分别称作**左左，左右，右左，右右</strong>。</p>
+<p>（1）左左即为在原来平衡的二叉树上，在节点的左子树的左子树下，有新节点插入；</p>
+<p>​   （2）左右即为在原来平衡的二叉树上，在节点的左子树的右子树下，有新节点插入；</p>
+<p>（3）右左即为在原来平衡的二叉树上，在节点的右子树的左子树下，有新节点插入；</p>
+<p>（4）右右即为在原来平衡的二叉树上，在节点的右子树的右子树下，有新节点插入。</p>
+<p>插入后如何调整树的平衡：</p>
+<p>​   左左调整其实比较简单，只需要对节点进行右旋；</p>
+<p>右右跟左左一样，只需要旋转一次就能把树调整平衡，左旋；</p>
+<p>而左右跟右左也一样，都要进行旋转两次才能把树调整平衡。</p>
+<p><strong>左左</strong>：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/10270460-dd86a676704eea3a.png?imageMogr2/auto-orient/strip|imageView2/2/w/934/format/webp" /></p>
+<p>图g</p>
+<p>**左左：**即为在原来平衡的二叉树上，在节点的左子树的左子树下，有新节点插入，导致节点的左右子树的高度差为2，如上即为”10“节点的左子树”7“，的左子树”4“，插入了节点”5“或”3“导致失衡。</p>
+<p>**左左调整：**其实比较简单，只需要对节点进行右旋即可，如下图，对节点”10“进行右旋：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/10270460-b733bd8a87274a65.png?imageMogr2/auto-orient/strip|imageView2/2/w/1198/format/webp" /></p>
+<p>图h</p>
+<p><strong>左右</strong>：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/10270460-ac644f03665d9f8c.png?imageMogr2/auto-orient/strip|imageView2/2/w/934/format/webp" /></p>
+<p>图i</p>
+<p>**左右：**即为在原来平衡的二叉树上，在节点的左子树的右子树下，有新节点插入，导致节点的左右子树的高度差为2，如上即为”11“节点的左子树”7“，的右子树”9“，插入了节点”10“或”8“导致失衡。</p>
+<p>**左右调整：**就不能像左左一样，进行一次旋转就完成调整。我们不妨先试着让左右像左左一样对”11“节点进行右旋，结果图如下，右图的二叉树依然不平衡，而右图就是接下来要讲的右左，即左右跟右左互为镜像，左左跟右右也互为镜像。</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/10270460-a37f3dec1a03115e.png?imageMogr2/auto-orient/strip|imageView2/2/w/1001/format/webp" /></p>
+<p>图j</p>
+<p><strong>右右跟左左一样，只需要旋转一次就能把树调整平衡，而左右跟右左也一样，都要进行旋转两次才能把树调整平衡</strong>，所以，首先上图的这种调整是错误的，正确的调整方式是，将左右进行第一次旋转，将左右先调整成左左，然后再对左左进行调整，从而使得二叉树平衡。</p>
+<p>即先对上图的节点”7“进行左旋，使得二叉树变成了左左，之后再对”11“节点进行右旋，此时二叉树就调整完成，如下图：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/10270460-181ceb6ce187203c.png?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp" /></p>
+<p>图k</p>
+<p><strong>右左</strong>：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/10270460-f0a13682833b5333.png?imageMogr2/auto-orient/strip|imageView2/2/w/1011/format/webp" /></p>
+<p>图l</p>
+<p>**右左：**即为在原来平衡的二叉树上，在节点的右子树的左子树下，有新节点插入，导致节点的左右子树的高度差为2，如上即为”11“节点的右子树”15“，的左子树”13“，插入了节点”12“或”14“导致失衡。</p>
+<p>**右左调整：**右左跟左右其实互为镜像，所以调整过程就反过来，先对节点”15“进行右旋，使得二叉树变成右右，之后再对”11“节点进行左旋，此时二叉树就调整完成，如下图:</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/10270460-6d34fcb6d86366a7.png?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp" /></p>
+<p>图m</p>
+<p><strong>右右</strong>：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/10270460-3617302d5ce2ecc1.png?imageMogr2/auto-orient/strip|imageView2/2/w/895/format/webp" /></p>
+<p>图n</p>
+<p>**右右：**即为在原来平衡的二叉树上，在节点的右子树的右子树下，有新节点插入，导致节点的左右子树的高度差为2，如上即为”11“节点的右子树”13“，的左子树”15“，插入了节点”14“或”19“导致失衡。</p>
+<p>**右右调整：**右右只需对节点进行一次左旋即可调整平衡，如下图，对”11“节点进行左旋。</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/10270460-3945739177c1888e.png?imageMogr2/auto-orient/strip|imageView2/2/w/894/format/webp" /></p>
+<p>图o</p>
+<p>**删除：**删除二叉树节点总结起来就两个判断：</p>
+<p>①.删除的是什么类型的节点？</p>
+<p>②.删除了节点之后是否导致失衡？</p>
+<p>​   节点的类型有三种：</p>
+<p>①.叶子节点；</p>
+<p>②.只有左子树或只有右子树；</p>
+<p>③.既有左子树又有右子树。</p>
+<p><strong>删除后调整：</strong></p>
+<p>​   针对这三种节点类型，再引入判断2），所以**处理**思路分别是：</p>
+<p>​   （1）当删除的节点是叶子节点，则将节点删除，然后从父节点开始，判断是否失衡，如果没有失衡，则再判断父节点的父节点是否失衡，直到根节点，此时到根节点还发现没有失衡，则说此时树是平衡的；如果中间过程发现失衡，则判断属于哪种类型   的失衡（左左，左右，右左，右右），然后进行调整。</p>
+<p>​   （2）删除的节点只有左子树或只有右子树，这种情况其实就比删除叶子节点的步骤多一步，就是将节点删除，然后把仅有一支的左子树或右子树替代原有结点的位置，后面的步骤就一样了，从父节点开始，判断是否失衡，如果没有失衡，则再判断父节   点的父节点是否失衡，直到根节点，如果中间过程发现失衡，则根据失衡的类型进行调整。</p>
+<p>​   （3）删除的节点既有左子树又有右子树，这种情况又比上面这种多一步，就是中序遍历，找到待删除节点的前驱或者后驱都行，然后与待删除节点互换位置，然后把待删除的节点删掉，后面的步骤也是一样，判断是否失衡，然后根据失衡类型进行调整。</p>
+<p><strong>【小结】</strong> 最后总结一下，平衡二叉树是一棵高度平衡的二叉树，所以查询的时间复杂度是 O(logN) 。插入的话上面也说，失衡的情况有4种，左左，左右，右左，右右，即一旦插入新节点导致失衡需要调整，最多也只要旋转2次，所以，插入复杂度是 O(1) ，但是平衡二叉树也不是完美的，也有缺点，从上面删除处理思路中也可以看到，就是删除节点时有可能因为失衡，导致需要从删除节点的父节点开始，不断的回溯到根节点，如果这棵平衡二叉树很高的话，那中间就要判断很多个节点。</p>
+
+              
+            </article>
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg>
+            回到页面顶部
+          </a>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021 PCNL 开源芯片院士工作室
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "navigation.tracking"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "search": "../../../../assets/javascripts/workers/search.cefbb252.min.js"}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.a5f8ea78.min.js"></script>
+      
+    
+  </body>
+</html>

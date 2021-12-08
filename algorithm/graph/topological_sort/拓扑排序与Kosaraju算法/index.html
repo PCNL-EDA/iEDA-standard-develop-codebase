@@ -1,0 +1,1247 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The page collects the standard base code for develop use.">
+      
+      
+        <meta name="author" content="PCNL-iEDA">
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.0.5">
+    
+    
+      
+        <title>拓扑排序与Kosaraju算法 - iEDA Standard Develop Codebase</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.a617204b.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.9204c3b2.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../../.." title="iEDA Standard Develop Codebase" class="md-header__button md-logo" aria-label="iEDA Standard Develop Codebase" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            iEDA Standard Develop Codebase
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              拓扑排序与Kosaraju算法
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PCNL-EDA/iEDA-standard-develop-codebase" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PCNL-EDA/iEDA-standard-develop-codebase
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../.." class="md-tabs__link">
+      主页
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../dynamic_programing/%E8%83%8C%E5%8C%85DP/" class="md-tabs__link">
+        算法
+      </a>
+    </li>
+  
+
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../cmake/cmake/" class="md-tabs__link">
+        CMake
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../datastructure/geometry/%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%9F%BA%E7%A1%80/" class="md-tabs__link">
+        数据结构
+      </a>
+    </li>
+  
+
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="iEDA Standard Develop Codebase" class="md-nav__button md-logo" aria-label="iEDA Standard Develop Codebase" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    iEDA Standard Develop Codebase
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PCNL-EDA/iEDA-standard-develop-codebase" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PCNL-EDA/iEDA-standard-develop-codebase
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        主页
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          算法
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="算法" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          算法
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_1" type="checkbox" id="__nav_2_1" >
+      
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_2_1">
+          动态规划
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="动态规划" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          动态规划
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dynamic_programing/%E8%83%8C%E5%8C%85DP/" class="md-nav__link">
+        背包DP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dynamic_programing/%E5%8C%BA%E9%97%B4DP/" class="md-nav__link">
+        区间DP
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_2_2">
+          其他算法
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="其他算法" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          其他算法
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../general/%E5%B9%B6%E6%9F%A5%E9%9B%86/" class="md-nav__link">
+        并查集
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          CMake
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="CMake" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          CMake
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../cmake/cmake/" class="md-nav__link">
+        基本语法
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          数据结构
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="数据结构" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          数据结构
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_1" type="checkbox" id="__nav_4_1" >
+      
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_4_1">
+          几何
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="几何" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_1">
+          <span class="md-nav__icon md-icon"></span>
+          几何
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../datastructure/geometry/%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%9F%BA%E7%A1%80/" class="md-nav__link">
+        计算几何基础
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../datastructure/heap/%E5%A0%86/" class="md-nav__link">
+        堆
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    1.有向图的概念和表示
+  </a>
+  
+    <nav class="md-nav" aria-label="1.有向图的概念和表示">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    概念
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    数据表示
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    2.有向图的可达性
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    3.环和有向无环图
+  </a>
+  
+    <nav class="md-nav" aria-label="3.环和有向无环图">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1_1" class="md-nav__link">
+    1.寻找有向环
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_1" class="md-nav__link">
+    2.拓扑排序
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    4.强连通分量
+  </a>
+  
+    <nav class="md-nav" aria-label="4.强连通分量">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1_2" class="md-nav__link">
+    1.强连通的定义
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_2" class="md-nav__link">
+    2.强连通分量
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3kosaraju" class="md-nav__link">
+    3.Kosaraju算法
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+  <h1>拓扑排序与Kosaraju算法</h1>
+
+<h2 id="1">1.有向图的概念和表示<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<h3 id="_1">概念<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>一幅有方向的图（或有向图）是由一组顶点和一组有方向的边组成的，每条有方向的边都连接着一对有序的顶点。</p>
+</blockquote>
+<p>其实在有向图的定义这里，我们没有很多要说明的，因为大家会觉得这种定义都是很自然的，但是我们要始终记得**有方向**这件事！</p>
+<h3 id="_2">数据表示<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<p>我们依然使用**邻接表**存储有向图，其中<code>v--&gt;w</code>表示为<code>顶点v</code>的邻接链表中包含一个<code>顶点w</code>。注意因为方向性，这里每条边只出现一次！</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/22556481-5df03647c8fbbe5e?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp" /></p>
+<p>如果你已经掌握了无向图的数据表示，你会发现有向图只是改了个名字而已，只有两处需要注意的地方：<code>addEdge(v,w)方法</code>与<code>reverse()方法</code>。在添加一条边时因为有了方向，我们只需要在邻接表中增加一次；<code>reverse()方法</code>能够返回一幅图的取反（即每个方向都颠倒过来），它会在以后的应用中发挥作用，现在我们只要有个印象就行。</p>
+<h2 id="2">2.有向图的可达性<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p>在无向图（上一篇文章）中，我们使用深度优先搜索可以找到一条路径，使用广度优先搜索可以找到两点间的最短路径。仔细想一下，它们是否对有向图适用呢？是的，<strong>同样的代码就可以完成这个任务，我们不需要做任何的改动（除了Graph换成Digraph）</strong>。</p>
+<p>因为这些内容在上篇文章中都已经详细介绍过，所以就不展开了，有兴趣的话可以翻一下上篇文章，有详细的图示讲解。</p>
+<h2 id="3">3.环和有向无环图<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<p>我们在实际生活中可能会面临这样一个问题：优先级限制下的调度问题。说人话就是你需要做一些事情，比如<code>A</code>,<code>B</code>,<code>C</code>，但是做这三件事情有一定的顺序限制，做<code>B</code>之前必须完成<code>A</code>,做<code>C</code>之前必须完成<code>B</code>…………你的任务就是给出一个解决方案（如何安排各种事情的顺序），使得限制都不冲突。</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/22556481-7b8b2df71f1a5e2c?imageMogr2/auto-orient/strip|imageView2/2/w/898/format/webp" /></p>
+<p>image</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/22556481-40f885c03c910684?imageMogr2/auto-orient/strip|imageView2/2/w/325/format/webp" /></p>
+<p>image</p>
+<p><img alt="img" src="https://i.bmp.ovh/imgs/2021/12/844bff9f1d77e73f.png" /></p>
+<p>image</p>
+<p>如上图，第一种和第二种情况都比较好办，但是第三种？<strong>是不是哪里出了问题！！！</strong></p>
+<p>对于上面的调度问题，我们可以通过有向图来抽象，顶点表示任务，箭头的方向表示优先级。不难发现，只要有向图中存在有向环，任务调度问题就不可能实现！所以，我们下面要解决两个问题：</p>
+<ul>
+<li>如何检测有向环（只检查存在性，不考虑有多少个）</li>
+<li>对于一个不存在有向环的有向图，如何排序找到解决方案（任务调度问题）</li>
+</ul>
+<h3 id="1_1">1.寻找有向环<a class="headerlink" href="#1_1" title="Permanent link">&para;</a></h3>
+<p>我们的解决方案是采用深度优先搜索。因为由系统维护的递归调用栈表示的正是“当前”正在遍历的有向路径。一旦我们找到了一条有向边<code>v--&gt;w</code>,并且<code>w</code>已经存在于栈中，就找到了一个环。因为栈表示的是一条由<code>w</code>指向<code>v</code>的有向路径，而<code>v--&gt;w</code>正好补全了这个环。同时，如果没有找到这样的边，则意味着这幅有向边是无环的。</p>
+<p>我们所使用的数据结构：</p>
+<ul>
+<li>基本的<code>dfs</code>算法</li>
+<li>新增一个<code>onStack[]</code>数组用来显式地记录栈上的顶点（即一个顶点是否在栈上）</li>
+</ul>
+<p>我们还是以一个具体的过程为例讲解</p>
+<p><img alt="img" src="https://i.bmp.ovh/imgs/2021/12/5a1a4ca54d5a5692.png" /></p>
+<p>image</p>
+<p><img alt="img" src="https://i.bmp.ovh/imgs/2021/12/f221f87455013a6b.png" /></p>
+<p>image</p>
+<p><img alt="img" src="https://i.bmp.ovh/imgs/2021/12/a8715f96b6963325.png" /></p>
+<p>image</p>
+<p><img alt="img" src="https://i.bmp.ovh/imgs/2021/12/9a0eac8aef30b513.png" /></p>
+<p>image</p>
+<p><img alt="img" src="https://i.bmp.ovh/imgs/2021/12/0fffd7c2c47fbe75.png" /></p>
+<p>image</p>
+<p><img alt="img" src="https://i.bmp.ovh/imgs/2021/12/01f8b1fd5ddf2c70.png" /></p>
+<p>image</p>
+<p><img alt="img" src="https://i.bmp.ovh/imgs/2021/12/c78e4461fa0db36c.png" /></p>
+<p>该类为标准的递归 <code>dfs()</code> 方法添加了一个布尔类型的数组 <code>onStack[]</code> 来保存递归调用期间栈上的
+ 所有顶点。当它找到一条边 <code>v → w</code> 且 <code>w</code> 在栈中时，它就找到了一个有向环。环上的所有顶点可以通过
+ <code>edgeTo[]</code> 中的链接得到。</p>
+<p>在执行 <code>dfs(G,v)</code> 时，查找的是一条由起点到 v 的有向路径。要保存这条路径, <code>DirectedCycle</code>维护了一个由顶点索引的数组 <code>onStack[]</code>，以标记递归调用的栈上的所有顶点（在调用
+ <code>dfs(G,v)</code> 时将 <code>onStack[v]</code> 设为 <code>True</code>，在调用结束时将其设为 <code>false</code>）。<code>DirectedCycle</code> 同时也
+ 使用了一个 <code>edgeTo[]</code> 数组，在找到有向环时返回环中的所有顶点，</p>
+<h3 id="2_1">2.拓扑排序<a class="headerlink" href="#2_1" title="Permanent link">&para;</a></h3>
+<p>如何解决优先级限制下的调度问题？其实这就是拓扑排序</p>
+<blockquote>
+<p>拓扑排序的定义：给定一幅有向图，将所有的顶点排序，使得所有的有向边均从排在前面的元素指向排在后面的元素（或者说明无法做到这一点）</p>
+</blockquote>
+<p>下面是一个典型的例子（排课问题）</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/22556481-539130b8c872299f?imageMogr2/auto-orient/strip|imageView2/2/w/898/format/webp" /></p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/22556481-1cad1f9c6540ec2b?imageMogr2/auto-orient/strip|imageView2/2/w/325/format/webp" /></p>
+<p>它还有一些其他的典型应用，比如：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/22556481-185498583de4011d?imageMogr2/auto-orient/strip|imageView2/2/w/881/format/webp" /></p>
+<p><strong>现在，准备工作已经差不多了，请集中注意力，这里的思想可能不是很好理解。紧跟我的思路。</strong></p>
+<p>现在首先假设我们有一副**有向无环图**，确保我们可以进行拓扑排序；通过拓扑排序，我们最终希望得到一组顶点的先后关系，排在前面的元素指向排在后面的元素，也就是对于任意的一条边<code>v——&gt;w</code>，我们得到的结果应该保证<code>顶点v</code>在<code>顶点w</code>前面；</p>
+<p>我们使用<code>dfs</code>解决这个问题，<strong>在调用<code>dfs(v)</code>时</strong>，以下三种情况必有其一：</p>
+<ul>
+<li><code>dfs(w)</code>已经被调用过且已经返回了（此时<code>w</code>已经被标记）</li>
+<li><code>dfs(w)</code>已经被调用过且还没有返回（仔细想想这种情况，这是不可能存在的）</li>
+<li><code>dfs(w)</code>还没有被调用（<code>w</code>还没有被标记），此时情况并不复杂，接下来会调用<code>dfs(w)</code>，然后返回<code>dfs(w)</code>，然后调用<code>dfs(v)</code></li>
+</ul>
+<p>简而言之，我们可以得到一个很重要的结论：<strong><code>dfs(w)</code>始终会在<code>dfs(v)</code>之前完成。</strong> <strong>换句话说，先完成<code>dfs</code>的顶点排在后面</strong></p>
+<p>请确保你完全理解了上面的思想，接下来其实就相对容易了。<strong>我们创建一个栈，每当一个顶点<code>dfs</code>完成时，就将这个顶点压入栈。</strong> 最后，出栈就是我们需要的顺序</p>
+<hr />
+<p>其实到这里拓扑排序基本上就已经被我们解决了，不过这里我们拓展一下，给出一些常见的排序方式，其中我们刚才说到的其实叫做**逆后序排序**。它们都是基于<code>dfs</code>。</p>
+<ul>
+<li>前序：在递归调用之前将顶点加入队列</li>
+<li>后序：在递归调用之后将顶点加入队列</li>
+<li>逆后序：在递归调用之后将顶点压入栈</li>
+</ul>
+<p>我们在这里一并实现这三个排序方法，在递归中它们表现得十分简单</p>
+<hr />
+<p>恭喜你，到这儿我们已经完全可以实现**拓扑排序**。</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#define MAXN 100001</span>
+<span class="cp">#define MAXM 500001</span>
+<span class="cp">#define true 1</span>
+<span class="cp">#define false 0</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">status</span><span class="p">;</span><span class="w"></span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">ElemType</span><span class="p">;</span><span class="w"></span>
+
+<span class="c1">//节点数据结构</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">Node</span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">ElemType</span><span class="w"> </span><span class="n">elem</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">struct</span> <span class="nc">Node</span><span class="w"> </span><span class="o">*</span><span class="n">next</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="n">Node</span><span class="p">,</span><span class="o">*</span><span class="n">pNode</span><span class="p">;</span><span class="w"></span>
+
+<span class="c1">//队列数据结构</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">Queue</span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">pNode</span><span class="w"> </span><span class="n">front</span><span class="p">;</span><span class="c1">//指向队列头部</span>
+<span class="w">    </span><span class="n">pNode</span><span class="w"> </span><span class="n">rear</span><span class="p">;</span><span class="c1">//指向队列尾部</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">;</span><span class="c1">//队列长度</span>
+<span class="p">}</span><span class="n">Queue</span><span class="p">,</span><span class="o">*</span><span class="n">pQueue</span><span class="p">;</span><span class="w"></span>
+
+<span class="c1">//邻接表</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">Vnode</span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">pNode</span><span class="w"> </span><span class="n">firstArc</span><span class="p">;</span><span class="c1">//边表头指针</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">innum</span><span class="p">;</span><span class="c1">//入度</span>
+<span class="p">}</span><span class="n">Vnode</span><span class="p">;</span><span class="w"></span>
+<span class="c1">//图数据结构</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">ALGraph</span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">Vnode</span><span class="o">*</span><span class="w"> </span><span class="n">adjList</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">vexnum</span><span class="p">;</span><span class="c1">//定点数</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">arcnum</span><span class="p">;</span><span class="c1">//边数</span>
+<span class="p">}</span><span class="n">ALGraph</span><span class="p">,</span><span class="o">*</span><span class="n">pALGraph</span><span class="p">;</span><span class="w"></span>
+
+<span class="c1">//创建一个队列</span>
+<span class="n">pQueue</span><span class="w"> </span><span class="nf">CreateQueue</span><span class="p">();</span><span class="w"></span>
+<span class="c1">//将一个元素加入队尾</span>
+<span class="n">ElemType</span><span class="w"> </span><span class="nf">AddNode</span><span class="p">(</span><span class="n">pQueue</span><span class="w"> </span><span class="n">queue</span><span class="p">,</span><span class="n">ElemType</span><span class="w"> </span><span class="n">elem</span><span class="p">);</span><span class="w"></span>
+<span class="c1">//将队头元素出队</span>
+<span class="n">status</span><span class="w"> </span><span class="nf">DeleteQueueNode</span><span class="p">(</span><span class="n">pQueue</span><span class="w"> </span><span class="n">queue</span><span class="p">);</span><span class="w"></span>
+<span class="c1">//判断当前队列是否为空</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">IsQueueEmpty</span><span class="p">(</span><span class="n">pQueue</span><span class="w"> </span><span class="n">queue</span><span class="p">);</span><span class="w"></span>
+<span class="c1">//删除队列</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">DeleteQueue</span><span class="p">(</span><span class="n">pQueue</span><span class="w"> </span><span class="n">queue</span><span class="p">);</span><span class="w"></span>
+<span class="c1">//创建一个图的邻接表结构</span>
+<span class="n">pALGraph</span><span class="w"> </span><span class="nf">CreateALGraph</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="kt">int</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w"></span>
+<span class="c1">//删除邻接表</span>
+<span class="n">status</span><span class="w"> </span><span class="nf">DeleteALGraph</span><span class="p">(</span><span class="n">pALGraph</span><span class="w"> </span><span class="n">G</span><span class="p">);</span><span class="w"></span>
+<span class="c1">//进行拓扑排序</span>
+<span class="n">status</span><span class="w"> </span><span class="nf">TopSort</span><span class="p">(</span><span class="n">pALGraph</span><span class="w"> </span><span class="n">G</span><span class="p">,</span><span class="n">pQueue</span><span class="w"> </span><span class="n">queue</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">T</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;请输入T：&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">T</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">T</span><span class="o">--</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">//输入的N和M值,即顶点数和边数</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;请输入N和M值&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d %d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">,</span><span class="o">&amp;</span><span class="n">m</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">pALGraph</span><span class="w"> </span><span class="n">G</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CreateALGraph</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">pQueue</span><span class="w"> </span><span class="n">queue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CreateQueue</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">TopSort</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="n">queue</span><span class="p">)){</span><span class="w"></span>
+<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Correct</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">else</span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Wrong</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="c1">//创建一个队列</span>
+<span class="n">pQueue</span><span class="w"> </span><span class="nf">CreateQueue</span><span class="p">(){</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//申请内存空间</span>
+<span class="w">    </span><span class="n">pQueue</span><span class="w"> </span><span class="n">queue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">pQueue</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Queue</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">queue</span><span class="o">!=</span><span class="nb">NULL</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="n">queue</span><span class="o">-&gt;</span><span class="n">front</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">queue</span><span class="o">-&gt;</span><span class="n">rear</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">queue</span><span class="o">-&gt;</span><span class="n">size</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//申请内存空间失败</span>
+<span class="w">    </span><span class="k">else</span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;分配失败&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">exit</span><span class="p">(</span><span class="mi">-1</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">queue</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="c1">//将一个元素加入队尾</span>
+<span class="n">ElemType</span><span class="w"> </span><span class="nf">AddNode</span><span class="p">(</span><span class="n">pQueue</span><span class="w"> </span><span class="n">queue</span><span class="p">,</span><span class="n">ElemType</span><span class="w"> </span><span class="n">elem</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//分配内存空间</span>
+<span class="w">    </span><span class="n">pNode</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">pNode</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Node</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//分配成功</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">node</span><span class="o">!=</span><span class="nb">NULL</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="n">node</span><span class="o">-&gt;</span><span class="n">elem</span><span class="o">=</span><span class="n">elem</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">node</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">IsQueueEmpty</span><span class="p">(</span><span class="n">queue</span><span class="p">)){</span><span class="w"></span>
+<span class="w">            </span><span class="n">queue</span><span class="o">-&gt;</span><span class="n">front</span><span class="o">=</span><span class="n">node</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">else</span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">queue</span><span class="o">-&gt;</span><span class="n">rear</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">=</span><span class="n">node</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">queue</span><span class="o">-&gt;</span><span class="n">rear</span><span class="o">=</span><span class="n">node</span><span class="p">;</span><span class="w"></span>
+
+
+<span class="w">        </span><span class="n">queue</span><span class="o">-&gt;</span><span class="n">size</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">elem</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="c1">//将队头元素出队</span>
+<span class="n">ElemType</span><span class="w"> </span><span class="nf">DeleteQueueNode</span><span class="p">(</span><span class="n">pQueue</span><span class="w"> </span><span class="n">queue</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="n">pNode</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queue</span><span class="o">-&gt;</span><span class="n">front</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">elem</span><span class="o">=</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">elem</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//如果队列不为空则删除头结点</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">IsQueueEmpty</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span><span class="o">==</span><span class="nb">false</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="n">queue</span><span class="o">-&gt;</span><span class="n">front</span><span class="o">=</span><span class="n">queue</span><span class="o">-&gt;</span><span class="n">front</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">free</span><span class="p">(</span><span class="n">node</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="c1">//队列大小减一</span>
+<span class="w">        </span><span class="n">queue</span><span class="o">-&gt;</span><span class="n">size</span><span class="o">--</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">elem</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">else</span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;删除失败，队列已经为空&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="c1">//判断当前队列是否为空</span>
+<span class="n">status</span><span class="w"> </span><span class="nf">IsQueueEmpty</span><span class="p">(</span><span class="n">pQueue</span><span class="w"> </span><span class="n">queue</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//如果队列长度为0，那么这个队列就是空队列</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">queue</span><span class="o">-&gt;</span><span class="n">size</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//如果不为0，则不是空队列</span>
+<span class="w">    </span><span class="k">else</span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="c1">//销毁一个队列</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">DeleteQueue</span><span class="p">(</span><span class="n">pQueue</span><span class="w"> </span><span class="n">queue</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">IsQueueEmpty</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span><span class="o">==</span><span class="nb">false</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">DeleteQueueNode</span><span class="p">(</span><span class="n">queue</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">queue</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="c1">//创建一个图的邻接表结构</span>
+<span class="n">pALGraph</span><span class="w"> </span><span class="nf">CreateALGraph</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="kt">int</span><span class="w"> </span><span class="n">m</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//循环变量</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//每行输入的两个顶点</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">pNode</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">pNode</span><span class="p">)</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Node</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="n">Vnode</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">nodeHead</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">Vnode</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Vnode</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MAXN</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">nodeHead</span><span class="o">-&gt;</span><span class="n">firstArc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">node</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">pALGraph</span><span class="w"> </span><span class="n">G</span><span class="o">=</span><span class="p">(</span><span class="n">pALGraph</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">ALGraph</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="n">G</span><span class="o">-&gt;</span><span class="n">vexnum</span><span class="o">=</span><span class="n">n</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">G</span><span class="o">-&gt;</span><span class="n">arcnum</span><span class="o">=</span><span class="n">m</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">G</span><span class="o">-&gt;</span><span class="n">adjList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nodeHead</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//初始化入度为0</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">&lt;</span><span class="n">m</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">G</span><span class="o">-&gt;</span><span class="n">adjList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">innum</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">&lt;</span><span class="n">m</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">//输入两个课程</span>
+<span class="w">        </span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d %d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">u</span><span class="p">,</span><span class="o">&amp;</span><span class="n">v</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="c1">//输入的课程序号是1-N，所以要减一</span>
+<span class="w">        </span><span class="n">u</span><span class="o">--</span><span class="p">;</span><span class="n">v</span><span class="o">--</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">pNode</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">pNode</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Node</span><span class="p">));</span><span class="w"></span>
+<span class="w">        </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">elem</span><span class="o">=</span><span class="n">v</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">=</span><span class="n">G</span><span class="o">-&gt;</span><span class="n">adjList</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">firstArc</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">G</span><span class="o">-&gt;</span><span class="n">adjList</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">firstArc</span><span class="o">=</span><span class="n">p</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">G</span><span class="o">-&gt;</span><span class="n">adjList</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">innum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">G</span><span class="o">-&gt;</span><span class="n">adjList</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">innum</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">G</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="n">status</span><span class="w"> </span><span class="nf">DeleteALGraph</span><span class="p">(</span><span class="n">pALGraph</span><span class="w"> </span><span class="n">G</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">pNode</span><span class="w"> </span><span class="n">p</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">&lt;</span><span class="n">G</span><span class="o">-&gt;</span><span class="n">vexnum</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">p</span><span class="o">=</span><span class="n">G</span><span class="o">-&gt;</span><span class="n">adjList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">firstArc</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="o">!=</span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">G</span><span class="o">-&gt;</span><span class="n">adjList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">firstArc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="n">free</span><span class="p">(</span><span class="n">p</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="n">p</span><span class="o">=</span><span class="n">G</span><span class="o">-&gt;</span><span class="n">adjList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">firstArc</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;delete ok!!&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="n">status</span><span class="w"> </span><span class="nf">TopSort</span><span class="p">(</span><span class="n">pALGraph</span><span class="w"> </span><span class="n">G</span><span class="p">,</span><span class="n">pQueue</span><span class="w"> </span><span class="n">queue</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//记录被删除的节点</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">count</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//队列</span>
+<span class="w">    </span><span class="c1">//把入度为0的加入到队列</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">&lt;</span><span class="n">G</span><span class="o">-&gt;</span><span class="n">vexnum</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">G</span><span class="o">-&gt;</span><span class="n">adjList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">innum</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">AddNode</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">IsQueueEmpty</span><span class="p">(</span><span class="n">queue</span><span class="p">)){</span><span class="w"></span>
+<span class="w">        </span><span class="c1">//删除第一个节点</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">elem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DeleteQueueNode</span><span class="p">(</span><span class="n">queue</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">count</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">pNode</span><span class="w"> </span><span class="n">p</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="c1">//获取与elem相连的点</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">G</span><span class="o">-&gt;</span><span class="n">adjList</span><span class="p">[</span><span class="n">elem</span><span class="p">].</span><span class="n">firstArc</span><span class="p">;</span><span class="w"> </span><span class="n">p</span><span class="o">!=</span><span class="nb">NULL</span><span class="p">;</span><span class="w"> </span><span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">index</span><span class="o">=</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">elem</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">G</span><span class="o">-&gt;</span><span class="n">adjList</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">innum</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">num</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span><span class="w"></span>
+<span class="w">                </span><span class="n">AddNode</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">count</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">G</span><span class="o">-&gt;</span><span class="n">vexnum</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<p>到这儿，有向环的检测与拓扑排序的内容就结束了，接下来我们要考虑有向图的强连通性问题</p>
+<h2 id="4">4.强连通分量<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<h3 id="1_2">1.强连通的定义<a class="headerlink" href="#1_2" title="Permanent link">&para;</a></h3>
+<p>回想一下我们在无向图的时候，当时我们就利用深度优先搜索解决了一幅无向图的连通问题。根据深搜能够到达所有连通的顶点，我们很容易解决这个问题。但是，问题变成有向图，就没有那么简单了！下面分别是无向图和有向图的两个例子：</p>
+<p><img alt="img" src="https://i.bmp.ovh/imgs/2021/12/b118e16f3978f3f5.png" /></p>
+<p>无向图的各连通分量</p>
+<blockquote>
+<p>定义。如果两个顶点<code>v</code>和<code>w</code>是互相可达的，则称它们为强连通的。也就是说，既存在一条从<code>v</code>到<code>w</code>的有向路径，也存在一条从<code>w</code>到<code>v</code>的有向路径。如果一幅有向图中的任意两个顶点都是强
+ 连通的，则称这幅有向图也是强连通的。</p>
+</blockquote>
+<p>以下是另一些强连通的例子：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/22556481-90de0ee5e8e03e3e?imageMogr2/auto-orient/strip|imageView2/2/w/453/format/webp" /></p>
+<p>强连通的有向图</p>
+<h3 id="2_2">2.强连通分量<a class="headerlink" href="#2_2" title="Permanent link">&para;</a></h3>
+<p>在有向图中，强连通性其实是顶点之间的一种等价关系，因为它有以下性质</p>
+<ul>
+<li>自反性：任意顶点 v 和自己都是强连通的</li>
+<li>对称性：如果 v 和 w 是强连通的，那么 w 和 v 也是强连通的</li>
+<li>传递性：如果 v 和 w 是强连通的且 w 和 x 也是强连通的，那
+   么 v 和 x 也是强连通的</li>
+</ul>
+<p>因为等价，所以和无向图一样，我们可以将一幅图分为若干个强连通分量，每一个强连通分量中的所有顶点都是强连通的。这样的话，<strong>任意给定两个顶点判断它们之间的强连通关系，我们就直接判断它们是否在同一个强连通分量中就可以了！</strong></p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/22556481-c7e4e1ddf7ba8c7d?imageMogr2/auto-orient/strip|imageView2/2/w/668/format/webp" /></p>
+<p>有向图的强连通分量</p>
+<p>接下来，我们需要设计一种算法来实现我们的目标————<strong>将一幅图分为若干个强连通分量</strong>。我们先来总结一下我们的目标：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/22556481-a1af76568ffd901f?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp" /></p>
+<p>image</p>
+<hr />
+<h3 id="3kosaraju">3.Kosaraju算法<a class="headerlink" href="#3kosaraju" title="Permanent link">&para;</a></h3>
+<p>Kosaraju算法就是一种经典的解决强连通性问题的算法，它实现很简单，但是不好理解**why**，希望你打起精神，我希望我能够把它讲明白（也只是希望，我会尽量，如果不清楚的话，强烈建议结合**算法4**一起食用）</p>
+<hr />
+<p>回忆一下我们之前在无向图的部分如何解决连通性问题的，<strong>一次dfs能够恰好遍历一个连通分量</strong>，所以我们可以通过<code>dfs</code>来计数，获取每个顶点的<code>id[]</code>;所以，我们在解决有向图的强连通性问题时，也希望能够利用**一次dfs能够恰好遍历一个连通分量**的性质；不过，在有向图中，它失效了，来看一下图一：</p>
+<p><img alt="img" src="https://s3.bmp.ovh/imgs/2021/12/05aa5919eab233e4.png" /></p>
+<p>图一</p>
+<p>在图一中，<code>dfs遍历</code>会存在两种情况：</p>
+<p>第一种情况：如果<code>dfs</code>的起点时<code>顶点A</code>，那么一次<code>dfs遍历</code>会遍历整个区域一和区域二，但是区域一与区域二并不是强连通的，这就是有向图给我们带来的困难！</p>
+<p>第二种情况：<strong>如果<code>dfs</code>的起点是<code>顶点D</code>，则第一次<code>dfs</code>会遍历区域二，第二次<code>dfs</code>会遍历区域一</strong>，这不就是我们想要的吗？</p>
+<p>所以，第二个情况给了我们一个努力的方向！也就是**如果我们人为地，将所有的可能的情况都变成第二种情况，事情不就解决了！**</p>
+<p>有了方向，那么接下来，我们来看一幅真实的有向图案例，如图二所示，这是一幅有向图，它的各个强连通分量在图中用灰色标记；我们的操作是将每个强连通分量看成一个**顶点（比较大而已）<strong>，那么会产生什么后果呢？**我们的原始的有向图就会变成一个有向无环图！</strong></p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/22556481-b84be82783b6a6c7?imageMogr2/auto-orient/strip|imageView2/2/w/521/format/webp" /></p>
+<p>图二</p>
+<p>ps:想一想为什么不能存在环呢？因为前提我们把所有的强连通分量看成了一个个顶点，如果<code>顶点A</code>和<code>顶点B</code>之间存在环，那<code>A</code>和<code>B</code>就会构成一个更大的强连通分量！它们本应属于一个顶点！</p>
+<p>在得到一幅有向无环图（DAG）之后，事情没有那么复杂了。现在，我们再回想一下我们的目的————<strong>在图一中，我们希望区域二先进行<code>dfs</code>，也就是箭头指向的区域先进行<code>dfs</code></strong>。在将一个个区域抽象成点后，问题归结于**在一幅有向无环图中，我们要找到一种顺序，这种顺序的规则是箭头指向的顶点排在前**！</p>
+<p>到这儿，我们稍微好好想想，我们的任务就是找到一种进行<code>dfs</code>的顺序，这种顺序，是不是和我们在前面讲到的**某种排序**十分相似呢？我想你已经不难想到了，就是**拓扑排序**！但是**和拓扑排序是完全相反的。**</p>
+<p>我们把箭头理解为优先级，对于顶点A指向顶点B，则A的优先级高于B。那么对于拓扑排序，<strong>优先级高者在前</strong>；对于我们的任务，<strong>优先级低者在前</strong>（我们想要的结果就是dfs不会从优先级低的地方跑到优先级高的地方）</p>
+<p>对于图二：我们想要的结果如图三所示：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/22556481-672350e6e7487326?imageMogr2/auto-orient/strip|imageView2/2/w/589/format/webp" /></p>
+<p>image</p>
+<p>如果我们从<code>顶点1</code>开始进行<code>dfs</code>，依次向右，那么永远不会发生我们不希望的情况！因为箭头是单向的！</p>
+<p>我想，到这儿，你应该差不多理解我的意思了。我们还有最后一个小问题————<strong>如何获取拓扑排序的反序？</strong></p>
+<p>其实解决方法很简单：对于一个有向图<code>G</code>,我们先取反（reverse方法），将图<code>G</code>的所有边的顺序颠倒，然后获取取反后的图的**逆后序排序（我们不能称为拓扑排序，因为真实情况是有环的）**；最后，我们利用刚才获得的顶点顺序对原图<code>G</code>进行<code>dfs</code>即可，这时它的原理与上一篇文章无向图的完全一致！</p>
+<p>最后，总结一下Kosaraju算法的实现步骤：</p>
+<ul>
+<li>1.在给定的一幅有向图 G 中，使用 DepthFirstOrder 来计算它的反向图 GR 的逆后序排列。</li>
+<li>2.在 G 中进行标准的深度优先搜索，但是要按照刚才计算得到的顺序而非标准的顺序来访问
+   所有未被标记的顶点。</li>
+</ul>
+<p>具体的实现代码只在无向图的实现<code>CC类</code>中增加了两行代码（改变dfs的顺序）</p>
+<p>最后，附上一幅具体的操作过程：</p>
+<p><img alt="img" src="https:////upload-images.jianshu.io/upload_images/22556481-2cf9e1a72b000702?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp" /></p>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="cpf">&lt;cstdio&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">max_v</span><span class="o">=</span><span class="mi">100</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">V</span><span class="p">;</span><span class="w"></span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="n">g</span><span class="p">[</span><span class="n">max_v</span><span class="p">];</span><span class="w"></span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="n">rg</span><span class="p">[</span><span class="n">max_v</span><span class="p">];</span><span class="w"></span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="n">vs</span><span class="p">;</span><span class="w"></span>
+<span class="kt">bool</span><span class="w"> </span><span class="n">used</span><span class="p">[</span><span class="n">max_v</span><span class="p">];</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="n">cmp</span><span class="p">[</span><span class="n">max_v</span><span class="p">];</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">add_edge</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">from</span><span class="p">,</span><span class="kt">int</span><span class="w"> </span><span class="n">to</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">g</span><span class="p">[</span><span class="n">from</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="n">to</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">rg</span><span class="p">[</span><span class="n">to</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="n">from</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">dfs</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">used</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">=</span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">g</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">size</span><span class="p">();</span><span class="n">i</span><span class="o">++</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">used</span><span class="p">[</span><span class="n">g</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">i</span><span class="p">]]){</span><span class="w"></span>
+<span class="w">            </span><span class="n">dfs</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">i</span><span class="p">]);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">vs</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">v</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">rdfs</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="p">,</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">used</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">=</span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">cmp</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">=</span><span class="n">k</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">rg</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">size</span><span class="p">();</span><span class="n">i</span><span class="o">++</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">used</span><span class="p">[</span><span class="n">rg</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">i</span><span class="p">]]){</span><span class="w"></span>
+<span class="w">            </span><span class="n">rdfs</span><span class="p">(</span><span class="n">rg</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">i</span><span class="p">],</span><span class="n">k</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">scc</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">memset</span><span class="p">(</span><span class="n">used</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="k">sizeof</span><span class="p">(</span><span class="n">used</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="n">vs</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">v</span><span class="o">&lt;</span><span class="n">V</span><span class="p">;</span><span class="n">v</span><span class="o">++</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">used</span><span class="p">[</span><span class="n">v</span><span class="p">]){</span><span class="w"></span>
+<span class="w">            </span><span class="n">dfs</span><span class="p">(</span><span class="n">v</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">memset</span><span class="p">(</span><span class="n">used</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="k">sizeof</span><span class="p">(</span><span class="n">used</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="n">vs</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="mi">-1</span><span class="p">;</span><span class="n">i</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">--</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">used</span><span class="p">[</span><span class="n">vs</span><span class="p">[</span><span class="n">i</span><span class="p">]]){</span><span class="w"></span>
+<span class="w">            </span><span class="n">rdfs</span><span class="p">(</span><span class="n">vs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">k</span><span class="o">++</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">k</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">V</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">m</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">m</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">m</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">u</span><span class="p">,</span><span class="o">&amp;</span><span class="n">v</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">add_edge</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ans</span><span class="o">=</span><span class="n">scc</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">ans</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+              
+            </article>
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg>
+            回到页面顶部
+          </a>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021 PCNL 开源芯片院士工作室
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "navigation.tracking"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "search": "../../../../assets/javascripts/workers/search.cefbb252.min.js"}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.a5f8ea78.min.js"></script>
+      
+    
+  </body>
+</html>
